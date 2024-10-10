@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISO710-BOOKS", "ISO710-BOOKS.csproj", "{58D11505-75F1-42DA-BB18-959B9D0F6875}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58D11505-75F1-42DA-BB18-959B9D0F6875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58D11505-75F1-42DA-BB18-959B9D0F6875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58D11505-75F1-42DA-BB18-959B9D0F6875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58D11505-75F1-42DA-BB18-959B9D0F6875}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0427160B-C8CA-4B62-9742-3B05DB7F1262}
+	EndGlobalSection
+EndGlobal
