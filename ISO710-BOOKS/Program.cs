@@ -1,9 +1,12 @@
 using ISO710_BOOKS.Models;
+using ISO710_BOOKS.Services;
 using Microsoft.EntityFrameworkCore;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHttpClient<GoogleBooksService>();
+builder.Services.Configure<GoogleBooksSettings>(builder.Configuration.GetSection("ApiSettings"));
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<Iso710Context>(options =>

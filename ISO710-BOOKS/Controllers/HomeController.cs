@@ -1,4 +1,5 @@
 using ISO710_BOOKS.Models;
+using ISO710_BOOKS.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,15 +8,18 @@ namespace ISO710_BOOKS.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly GoogleBooksService booksService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, GoogleBooksService _googleBooksService)
         {
             _logger = logger;
+            booksService = _googleBooksService;
         }
 
-        public IActionResult Index()
+        public async  Task<IActionResult> Index()
         {
-            return View();
+            List<LibroModel> libros = await booksService.ObtenerLibrosAsync("programming");
+            return View(libros);
         }
 
         public IActionResult Privacy()
