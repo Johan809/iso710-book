@@ -18,7 +18,7 @@ namespace ISO710_BOOKS.Controllers
 
         public async  Task<IActionResult> Index()
         {
-            List<LibroModel> libros = await booksService.ObtenerLibrosAsync("programming");
+            List<LibroModel> libros = await booksService.ObtenerLibrosAsync("history");
             return View(libros);
         }
 

@@ -1,0 +1,122 @@
+﻿@model ISO710_BOOKS.Models.Prestamo
+@{
+    ViewData["Title"] = "Crear Prestamo";
+    var libro = ViewBag.Libro as ISO710_BOOKS.Models.LibroModel;
+    var error = ViewBag.Error as string;
+}
+
+<h1>Nuevo Prestamo</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Selector para el Miembro -->
+            <div class="form-group mb-2">
+                <label asp-for="MiembroId" class="control-label"></label>
+                <select asp-for="MiembroId" class="form-control" asp-items="ViewBag.MiembroId"></select>
+            </div>
+
+            <!-- Campo para ingresar el ISBN -->
+            <div class="form-group mb-2">
+                <label asp-for="Isbn" class="control-label"></label>
+                <input asp-for="Isbn" class="form-control" id="isbn" />
+                <span asp-validation-for="Isbn" class="text-danger"></span>
+            </div>
+
+            <!-- Botón para obtener detalles del libro -->
+            <div class="form-group mb-2">
+                <button type="button" class="btn btn-info" id="buscarLibro">Buscar Libro</button>
+            </div>
+
+            <!-- Mostrar error si no se encuentra el libro -->
+            @if (!string.IsNullOrEmpty(error))
+            {
+                <div class="alert alert-danger">
+                    <strong>Error:</strong> @error
+                </div>
+            }
+
+            <!-- Campo Título del préstamo (rellenado por la API de Google Books si está disponible) -->
+            <div class="form-group mb-2">
+                <label asp-for="Titulo" class="control-label"></label>
+                <input asp-for="Titulo" class="form-control" value="@libro?.Titulo" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <!-- Fecha de Devolución -->
+            <div class="form-group mb-2">
+                <label asp-for="FechaDevolucion" class="control-label"></label>
+                <input asp-for="FechaDevolucion" class="form-control" />
+                <span asp-validation-for="FechaDevolucion" class="text-danger"></span>
+            </div>
+
+            <!-- Comentario -->
+            <div class="form-group mb-2">
+                <label asp-for="Comentario" class="control-label"></label>
+                <textarea asp-for="Comentario" class="form-control"></textarea>
+            </div>
+
+            <!-- Botón para enviar el formulario -->
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Crear
+                </button>
+                <button class="btn btn-secondary">
+                    <a class="text-white text-decoration-none" asp-action="Index">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        Volver
+                    </a>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <!-- Mostrar detalles del libro si está disponible -->
+        @if (libro != null)
+        {
+            <div class="form-group mb-2">
+                <strong>Título del Libro:</strong>
+                <p>@libro.Titulo</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Autor:</strong>
+                <p>@libro.Autor</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Editorial:</strong>
+                <p>@libro.Editorial</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Año de Publicación:</strong>
+                <p>@libro.AñoPublicacion</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Descripción:</strong>
+                <p>@libro.Descripcion</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Portada del Libro:</strong><br />
+                <img src="@libro.PortadaUrl" alt="Portada del libro" style="width: 200px;" />
+            </div>
+        }
+    </div>
+
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        // JavaScript para consultar el libro mediante el ISBN
+        document.getElementById("buscarLibro").addEventListener("click", function () {
+            var isbn = document.getElementById("isbn").value;
+            if (isbn) {
+                window.location.href = '/Prestamos/ObtenerLibro?isbn=' + isbn;
+            }
+        });
+    </script>
+}

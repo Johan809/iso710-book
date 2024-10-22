@@ -1,0 +1,4 @@
+﻿To-Do:
+ * Hacer el mantenimiento de Prestamos (formulario complejo)
+ * Selenium para ese formulario
+ * API que exporte los Prestamos

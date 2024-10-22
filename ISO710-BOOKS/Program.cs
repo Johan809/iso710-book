@@ -8,6 +8,12 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient<GoogleBooksService>();
 builder.Services.Configure<GoogleBooksSettings>(builder.Configuration.GetSection("ApiSettings"));
 builder.Services.AddControllersWithViews();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTodo", builder =>
+        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+builder.Services.AddControllers();
 
 builder.Services.AddDbContext<Iso710Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -26,9 +32,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseCors("PermitirTodo");
 app.UseRouting();
-
 app.UseAuthorization();
+app.UseEndpoints(endpoints => { _ = endpoints.MapControllers(); });
 
 app.MapControllerRoute(
     name: "default",

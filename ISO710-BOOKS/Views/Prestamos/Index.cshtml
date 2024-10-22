@@ -1,0 +1,84 @@
+﻿@model IEnumerable<ISO710_BOOKS.Models.Prestamo>
+
+@{
+    ViewData["Title"] = "Prestamos";
+}
+
+<h1>Prestamos</h1>
+
+<p>
+    <button type="button" class="btn btn-success">
+        <a asp-action="Create" class="text-white text-decoration-none">
+            Nuevo <i class="fa-solid fa-plus"></i>
+        </a>
+    </button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Isbn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Titulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaPrestamo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaDevolucion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Devuelto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Miembro)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Isbn)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titulo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaPrestamo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaDevolucion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Devuelto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Miembro.Correo)
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary" title="Editar">
+                        <a class="text-white text-decoration-none" asp-action="Edit" asp-route-id="@item.PrestamoId">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+                    </button>
+                    |
+                    <button class="btn btn-sm btn-info" title="Detalles">
+                        <a class="text-white text-decoration-none" asp-action="Details" asp-route-id="@item.PrestamoId">
+                            <i class="fa-regular fa-eye"></i>
+                        </a>
+                    </button>
+                    |
+                    <button class="btn btn-sm btn-danger" title="Eliminar">
+                        <a class="text-white text-decoration-none" asp-action="Delete" asp-route-id="@item.PrestamoId">
+                            <i class="fa-solid fa-delete-left"></i>
+                        </a>
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
