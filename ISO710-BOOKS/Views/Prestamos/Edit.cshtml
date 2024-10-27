@@ -1,59 +1,128 @@
 ﻿@model ISO710_BOOKS.Models.Prestamo
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Prestamo";
+    var libro = ViewBag.Libro as ISO710_BOOKS.Models.LibroModel;
+    var error = ViewBag.Error as string;
 }
 
-<h1>Edit</h1>
-
-<h4>Prestamo</h4>
+<h1>Editar Préstamo</h1>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <input type="hidden" asp-for="PrestamoId" />
-            <div class="form-group">
+            <input type="hidden" asp-for="LibroId" />
+
+            <!-- Selector para el Miembro -->
+            <div class="form-group mb-2">
                 <label asp-for="MiembroId" class="control-label"></label>
-                <select asp-for="MiembroId" class="form-control" asp-items="ViewBag.MiembroId"></select>
+                <select asp-for="MiembroId" class="form-control" asp-items="ViewBag.MiembroId" readonly></select>
                 <span asp-validation-for="MiembroId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <!-- ISBN mostrado como texto plano -->
+            <div class="form-group mb-2">
                 <label asp-for="Isbn" class="control-label"></label>
-                <input asp-for="Isbn" class="form-control" />
-                <span asp-validation-for="Isbn" class="text-danger"></span>
+                <input asp-for="Isbn" class="form-control" readonly />
             </div>
-            <div class="form-group">
+
+            <!-- Título del libro mostrado como texto plano -->
+            <div class="form-group mb-2">
                 <label asp-for="Titulo" class="control-label"></label>
-                <input asp-for="Titulo" class="form-control" />
-                <span asp-validation-for="Titulo" class="text-danger"></span>
+                <input asp-for="Titulo" class="form-control" value="@libro?.Titulo" readonly />
             </div>
-            <div class="form-group">
+
+            <!-- Fecha de Préstamo -->
+            <div class="form-group mb-2">
                 <label asp-for="FechaPrestamo" class="control-label"></label>
-                <input asp-for="FechaPrestamo" class="form-control" />
+                <input asp-for="FechaPrestamo" class="form-control" type="date" readonly />
                 <span asp-validation-for="FechaPrestamo" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <!-- Fecha de Devolución -->
+            <div class="form-group mb-2">
                 <label asp-for="FechaDevolucion" class="control-label"></label>
-                <input asp-for="FechaDevolucion" class="form-control" />
+                <input asp-for="FechaDevolucion" class="form-control" type="date" />
                 <span asp-validation-for="FechaDevolucion" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Devuelto" class="control-label"></label>
-                <input asp-for="Devuelto" class="form-control" />
-                <span asp-validation-for="Devuelto" class="text-danger"></span>
+
+            <!-- Estado del Préstamo (Radio Buttons) -->
+            <div class="form-group mb-2">
+                <label>Estado del Préstamo</label><br />
+                <input type="radio" asp-for="Estado" value="Activo" /> Activo
+                <input type="radio" asp-for="Estado" value="Finalizado" /> Finalizado
             </div>
+
+            <!-- Casillas de verificación (Es Urgente y Edición Especial) -->
+            <div class="form-group mb-2">
+                <input asp-for="EsUrgente" type="checkbox" />
+                <label asp-for="EsUrgente">Es Urgente</label>
+            </div>
+            <div class="form-group mb-2">
+                <input asp-for="EsEdicionEspecial" type="checkbox" />
+                <label asp-for="EsEdicionEspecial">Edición Especial</label>
+            </div>
+
+            <!-- Comentario -->
+            <div class="form-group mb-2">
+                <label asp-for="Comentario" class="control-label"></label>
+                <textarea asp-for="Comentario" class="form-control"></textarea>
+            </div>
+
+            <!-- Botón para guardar los cambios -->
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <button class="btn btn-primary" type="submit">
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    Guardar Cambios
+                </button>
+                <button class="btn btn-secondary">
+                    <a class="text-white text-decoration-none" asp-action="Index">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        Volver
+                    </a>
+                </button>
             </div>
         </form>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="col-md-6">
+        <!-- Mostrar detalles del libro si está disponible -->
+        @if (libro != null)
+        {
+            <div class="form-group mb-2">
+                <strong>Título del Libro:</strong>
+                <p>@libro.Titulo</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Autor:</strong>
+                <p>@libro.Autor</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Editorial:</strong>
+                <p>@libro.Editorial</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Año de Publicación:</strong>
+                <p>@libro.AñoPublicacion</p>
+            </div>
+            <div class="form-group mb-2">
+                <strong>Descripción:</strong>
+                @Html.Raw(libro.Descripcion)
+            </div>
+            <div class="form-group mb-2">
+                <strong>Portada del Libro:</strong><br />
+                <img src="@libro.PortadaUrl" alt="Portada del libro" style="width: 200px;" class="border border-1 border-dark" />
+            </div>
+        }
+    </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

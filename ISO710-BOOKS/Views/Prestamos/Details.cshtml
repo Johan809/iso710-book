@@ -1,54 +1,112 @@
 ﻿@model ISO710_BOOKS.Models.Prestamo
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles";
+    var libro = ViewBag.Libro as ISO710_BOOKS.Models.LibroModel;
 }
 
-<h1>Details</h1>
+<h1>Detalles del Préstamo</h1>
 
 <div>
     <h4>Prestamo</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <div class="float-end">
+            <!-- Mostrar detalles del libro si está disponible -->
+            @if (libro != null)
+            {
+                <div>
+                    <strong>Portada del Libro:</strong>
+                    <br />
+                    <img src="@libro.PortadaUrl" alt="Portada del libro" style="width: 200px;" class="border border-1 border-dark" />
+                </div>
+            }
+        </div>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Isbn)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Isbn)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Titulo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Titulo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FechaPrestamo)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FechaPrestamo)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.FechaDevolucion)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FechaDevolucion)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Devuelto)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Devuelto)
+        <dd class="col-sm-10">
+            @(Model.Devuelto == true ? "Sí" : "No")
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Miembro)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Miembro.Correo)
         </dd>
+
+        <!-- Estado del Préstamo -->
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+
+        <!-- Es Urgente -->
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EsUrgente)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.EsUrgente == true ? "Sí" : "No")
+        </dd>
+
+        <!-- Edición Especial -->
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EsEdicionEspecial)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.EsEdicionEspecial == true ? "Sí" : "No")
+        </dd>
+
+        <!-- Comentario -->
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Comentario)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Comentario)
+        </dd>
+
+
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.PrestamoId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <button class="btn btn-primary" title="Editar">
+        <a class="text-white text-decoration-none" asp-action="Edit" asp-route-id="@Model?.PrestamoId">
+            <i class="fa-solid fa-pen-to-square"></i>
+            Editar
+        </a>
+    </button>
+    |
+    <button class="btn btn-secondary" title="Volver">
+        <a class="text-white text-decoration-none" asp-action="Index">
+            <i class="fa-solid fa-chevron-left"></i>
+            Volver
+        </a>
+    </button>
 </div>
+

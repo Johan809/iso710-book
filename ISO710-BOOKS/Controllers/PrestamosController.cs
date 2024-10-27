@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ISO710_BOOKS.Models;
+using ISO710_BOOKS.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ISO710_BOOKS.Models;
-using ISO710_BOOKS.Services;
 
 namespace ISO710_BOOKS.Controllers
 {
@@ -14,6 +10,7 @@ namespace ISO710_BOOKS.Controllers
     {
         private readonly Iso710Context _context;
         private readonly GoogleBooksService _googleBooksService;
+        private const string _bindingProps = "PrestamoId,MiembroId,Isbn,Titulo,FechaPrestamo,FechaDevolucion,Devuelto,Comentario,Estado,EsUrgente,EsEdicionEspecial,LibroId";
 
         public PrestamosController(Iso710Context context, GoogleBooksService googleBooksService)
         {
@@ -44,22 +41,21 @@ namespace ISO710_BOOKS.Controllers
                 return NotFound();
             }
 
+            if (!string.IsNullOrEmpty(prestamo.LibroId))
+            {
+                LibroModel libro = await _googleBooksService.ObtenerLibroPorId(prestamo.LibroId);
+                ViewBag.Libro = libro;
+            }
+
             return View(prestamo);
         }
 
-        //// GET: Prestamos/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["MiembroId"] = new SelectList(_context.Miembros, "MiembroId", "NombreCompleto");
-        //    return View();
-        //}
-
-        public async Task<IActionResult> Create(string? isbn)
+        public async Task<IActionResult> Create(string? id)
         {
             // Si se proporciona un ISBN, intentamos obtener el libro de la API de Google Books
-            if (!string.IsNullOrEmpty(isbn))
+            if (!string.IsNullOrEmpty(id))
             {
-                var libro = await _googleBooksService.ObtenerLibroPorISBN(isbn);
+                var libro = await _googleBooksService.ObtenerLibroPorId(id);
                 if (libro != null)
                 {
                     ViewBag.Libro = libro;
@@ -77,8 +73,14 @@ namespace ISO710_BOOKS.Controllers
         // POST: Prestamos/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PrestamoId,MiembroId,Isbn,Titulo,FechaPrestamo,FechaDevolucion,Devuelto,Comentario")] Prestamo prestamo)
+        public async Task<IActionResult> Create([Bind(_bindingProps)] Prestamo prestamo)
         {
+            prestamo.FechaPrestamo = DateTime.Now;
+            if (prestamo.MiembroId > 0)
+            {
+                prestamo.Miembro = _context.Miembros.First(m => m.MiembroId == prestamo.MiembroId);
+                ModelState["Miembro"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(prestamo);
@@ -102,6 +104,12 @@ namespace ISO710_BOOKS.Controllers
             {
                 return NotFound();
             }
+            if (!string.IsNullOrEmpty(prestamo.LibroId))
+            {
+                LibroModel libro = await _googleBooksService.ObtenerLibroPorId(prestamo.LibroId);
+                ViewBag.Libro = libro;
+            }
+
             ViewData["MiembroId"] = new SelectList(_context.Miembros, "MiembroId", "NombreCompleto", prestamo.MiembroId);
             return View(prestamo);
         }
@@ -109,13 +117,23 @@ namespace ISO710_BOOKS.Controllers
         // POST: Prestamos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PrestamoId,MiembroId,Isbn,Titulo,FechaPrestamo,FechaDevolucion,Devuelto,Comentario")] Prestamo prestamo)
+        public async Task<IActionResult> Edit(int id, [Bind(_bindingProps)] Prestamo prestamo)
         {
             if (id != prestamo.PrestamoId)
             {
                 return NotFound();
             }
 
+            if (prestamo.MiembroId > 0)
+            {
+                prestamo.Miembro = _context.Miembros.First(m => m.MiembroId == prestamo.MiembroId);
+                ModelState["Miembro"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+            }
+            if (!string.IsNullOrEmpty(prestamo.LibroId))
+            {
+                LibroModel libro = await _googleBooksService.ObtenerLibroPorId(prestamo.LibroId);
+                ViewBag.Libro = libro;
+            }
             if (ModelState.IsValid)
             {
                 try

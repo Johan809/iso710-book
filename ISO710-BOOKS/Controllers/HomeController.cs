@@ -18,7 +18,8 @@ namespace ISO710_BOOKS.Controllers
 
         public async  Task<IActionResult> Index()
         {
-            List<LibroModel> libros = await booksService.ObtenerLibrosAsync("history");
+            string categoria = ObtenerCategoriaAleatoria();
+            List<LibroModel> libros = await booksService.ObtenerLibrosAsync(categoria);
             return View(libros);
         }
 
@@ -32,5 +33,14 @@ namespace ISO710_BOOKS.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        private string ObtenerCategoriaAleatoria()
+        {
+            var categorias = new List<string> { "history", "science", "technology", "art", "literature", "sports", "health", "philosophy", "music", "education" };
+            Random random = new Random();
+            int index = random.Next(categorias.Count);
+            return categorias[index];
+        }
+
     }
 }

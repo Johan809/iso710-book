@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ISO710_BOOKS.Models;
 
@@ -23,11 +22,14 @@ public partial class Miembro
     [RegularExpression(@"\(\d{3}\) \d{3}-\d{4}", ErrorMessage = "El formato del teléfono debe ser (###) ###-####")]
     public string? Telefono { get; set; }
 
+    [JsonIgnore]
     public string? Direccion { get; set; }
 
+    [JsonIgnore]
     [DisplayName("Fecha de Registro")]
     [DataType(DataType.DateTime)]
     public DateTime? FechaRegistro { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Prestamo> Prestamos { get; set; } = new List<Prestamo>();
 }

@@ -5,13 +5,19 @@
     var error = ViewBag.Error as string;
 }
 
-<h1>Nuevo Prestamo</h1>
+<h1>Nuevo Préstamo</h1>
 <hr />
 
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <!-- Campo oculto para el ID del Libro -->
+            @if (libro != null)
+            {
+                <input type="hidden" name="LibroId" asp-for="LibroId" value="@libro.Id" />
+            }
 
             <!-- Selector para el Miembro -->
             <div class="form-group mb-2">
@@ -22,7 +28,7 @@
             <!-- Campo para ingresar el ISBN -->
             <div class="form-group mb-2">
                 <label asp-for="Isbn" class="control-label"></label>
-                <input asp-for="Isbn" class="form-control" id="isbn" />
+                <input asp-for="Isbn" class="form-control" id="isbn" value="@libro?.ISBN" />
                 <span asp-validation-for="Isbn" class="text-danger"></span>
             </div>
 
@@ -49,8 +55,25 @@
             <!-- Fecha de Devolución -->
             <div class="form-group mb-2">
                 <label asp-for="FechaDevolucion" class="control-label"></label>
-                <input asp-for="FechaDevolucion" class="form-control" />
+                <input asp-for="FechaDevolucion" class="form-control" type="date" />
                 <span asp-validation-for="FechaDevolucion" class="text-danger"></span>
+            </div>
+
+            <!-- Estado del Préstamo (Radio Buttons) -->
+            <div class="form-group mb-2">
+                <label>Estado del Préstamo</label><br />
+                <input type="radio" asp-for="Estado" value="Activo" checked disabled /> Activo
+                <input type="radio" asp-for="Estado" value="Finalizado" disabled /> Finalizado
+            </div>
+
+            <!-- Casillas de verificación (Es Urgente y Edición Especial) -->
+            <div class="form-group mb-2">
+                <input asp-for="EsUrgente" type="checkbox" />
+                <label asp-for="EsUrgente">Es Urgente</label>
+            </div>
+            <div class="form-group mb-2">
+                <input asp-for="EsEdicionEspecial" type="checkbox" />
+                <label asp-for="EsEdicionEspecial">Edición Especial</label>
             </div>
 
             <!-- Comentario -->
@@ -96,15 +119,14 @@
             </div>
             <div class="form-group mb-2">
                 <strong>Descripción:</strong>
-                <p>@libro.Descripcion</p>
+                @Html.Raw(libro.Descripcion)
             </div>
             <div class="form-group mb-2">
                 <strong>Portada del Libro:</strong><br />
-                <img src="@libro.PortadaUrl" alt="Portada del libro" style="width: 200px;" />
+                <img src="@libro.PortadaUrl" alt="Portada del libro" style="width: 200px;" class="border border-1 border-dark" />
             </div>
         }
     </div>
-
 </div>
 
 @section Scripts {

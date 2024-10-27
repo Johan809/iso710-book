@@ -1,8 +1,13 @@
-using ISO710_BOOKS.Models;
+﻿using ISO710_BOOKS.Models;
 using ISO710_BOOKS.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+var defaultCulture = new CultureInfo("es-ES");
+CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
 // Add services to the container.
 builder.Services.AddHttpClient<GoogleBooksService>();

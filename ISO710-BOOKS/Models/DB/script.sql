@@ -21,6 +21,11 @@ CREATE TABLE Prestamo (
     FechaPrestamo DATETIME DEFAULT GETDATE(),
     FechaDevolucion DATETIME,
     Devuelto BIT DEFAULT 0,
+    Comentario VARCHAR(255) NULL,
+    Estado VARCHAR(20) NULL,
+    EsUrgente BIT DEFAULT 0,
+    EsEdicionEspecial BIT DEFAULT 0,
+
 
     -- Clave foránea para relacionar los préstamos con los miembros
     CONSTRAINT FK_Prestamo_Miembro FOREIGN KEY (MiembroId)
