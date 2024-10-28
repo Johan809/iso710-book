@@ -23,11 +23,11 @@ public class MiembroFormTests
 
         // Llena el campo "Nombre Completo"
         var nombreCompleto = driver.FindElement(By.Id("NombreCompleto"));
-        nombreCompleto.SendKeys("Juan Pérez");
+        nombreCompleto.SendKeys("Rafael Rodriguez");
 
         // Llena el campo "Correo"
         var correo = driver.FindElement(By.Id("Correo"));
-        correo.SendKeys("juan.perez@example.com");
+        correo.SendKeys("r.rodriguez@example.com");
 
         // Llena el campo "Teléfono"
         var telefono = driver.FindElement(By.Id("Telefono"));
@@ -67,6 +67,7 @@ public class MiembroFormTests
     [TearDown]
     public void TearDown()
     {
+        Thread.Sleep(3000);
         driver.Quit();
         driver.Dispose();
     }

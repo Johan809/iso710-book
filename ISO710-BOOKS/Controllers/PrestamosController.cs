@@ -62,7 +62,7 @@ namespace ISO710_BOOKS.Controllers
                 }
                 else
                 {
-                    ViewBag.Error = "No se encontró ningún libro con ese ISBN.";
+                    ViewBag.Error = "No se encontró ningún libro con ese ID.";
                 }
             }
 
@@ -76,12 +76,17 @@ namespace ISO710_BOOKS.Controllers
         public async Task<IActionResult> Create([Bind(_bindingProps)] Prestamo prestamo)
         {
             prestamo.FechaPrestamo = DateTime.Now;
+            bool skipValidation = false;
             if (prestamo.MiembroId > 0)
             {
                 prestamo.Miembro = _context.Miembros.First(m => m.MiembroId == prestamo.MiembroId);
-                ModelState["Miembro"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+                if (ModelState["Miembro"] != null)
+                {
+                    ModelState["Miembro"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+                }
+                else skipValidation = true;
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || skipValidation)
             {
                 _context.Add(prestamo);
                 await _context.SaveChangesAsync();

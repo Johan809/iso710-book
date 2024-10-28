@@ -12,12 +12,9 @@
     <div class="col-md-6">
         <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            
+
             <!-- Campo oculto para el ID del Libro -->
-            @if (libro != null)
-            {
-                <input type="hidden" name="LibroId" asp-for="LibroId" value="@libro.Id" />
-            }
+            <input type="hidden" name="LibroId" asp-for="LibroId" value="@(libro?.Id ?? string.Empty)" />
 
             <!-- Selector para el Miembro -->
             <div class="form-group mb-2">
@@ -84,11 +81,11 @@
 
             <!-- Botón para enviar el formulario -->
             <div class="form-group">
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" type="submit" id="btnSubmit">
                     <i class="fa-solid fa-floppy-disk"></i>
                     Crear
                 </button>
-                <button class="btn btn-secondary">
+                <button class="btn btn-secondary" type="button">
                     <a class="text-white text-decoration-none" asp-action="Index">
                         <i class="fa-solid fa-chevron-left"></i>
                         Volver
