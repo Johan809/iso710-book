@@ -21,7 +21,8 @@ public class PrestamoFormTests
     [Test]
     public void CreatePrestamoTest()
     {
-        driver.Navigate().GoToUrl($"{base_url}/Create/7eDGBgAAQBAJ");
+        string libroId = "pq3sCAAAQBAJ";
+        driver.Navigate().GoToUrl($"{base_url}/Create/{libroId}");
 
         // Selecciona un miembro en el selector de MiembroId
         var miembroSelect = driver.FindElement(By.Id("MiembroId"));
@@ -30,11 +31,17 @@ public class PrestamoFormTests
 
         // Llena el campo ISBN
         var isbn = driver.FindElement(By.Id("isbn"));
-        isbn.SendKeys("9781733139243");
+        if (string.IsNullOrEmpty(isbn.GetAttribute("value")))
+        {
+            isbn.SendKeys("9789401569408");
+        }
 
         // Llena el campo Título
         var titulo = driver.FindElement(By.Id("Titulo"));
-        titulo.SendKeys("Ejemplo de Título");
+        if (string.IsNullOrEmpty(titulo.GetAttribute("value")))
+        {
+            titulo.SendKeys("Un titulo de tecnologia");
+        }
 
         // Llena el campo Fecha de Devolución
         var fechaDevolucion = driver.FindElement(By.Id("FechaDevolucion"));
@@ -51,8 +58,13 @@ public class PrestamoFormTests
         var comentario = driver.FindElement(By.Id("Comentario"));
         comentario.SendKeys("Este es un comentario de prueba para el préstamo.");
 
-        string libroIdValue = "7eDGBgAAQBAJ"; // Reemplaza este valor con el que necesites
-        ((IJavaScriptExecutor)driver).ExecuteScript($"document.getElementsByName('LibroId')[0].value = '{libroIdValue}';");
+        var libroIdInput = (string)((IJavaScriptExecutor)driver)
+            .ExecuteScript("return document.getElementsByName('LibroId')[0].value;");
+        if (string.IsNullOrEmpty(libroIdInput))
+        {
+            ((IJavaScriptExecutor)driver)
+                .ExecuteScript($"document.getElementsByName('LibroId')[0].value = '{libroId}';");
+        }
 
         // Enviar el formulario
         var submitButton = driver.FindElement(By.Id("btnSubmit"));

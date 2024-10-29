@@ -129,17 +129,22 @@ namespace ISO710_BOOKS.Controllers
                 return NotFound();
             }
 
+            bool skipValidation = false;
             if (prestamo.MiembroId > 0)
             {
                 prestamo.Miembro = _context.Miembros.First(m => m.MiembroId == prestamo.MiembroId);
-                ModelState["Miembro"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+                if (ModelState["Miembro"] != null)
+                {
+                    ModelState["Miembro"].ValidationState = Microsoft.AspNetCore.Mvc.ModelBinding.ModelValidationState.Valid;
+                }
+                else skipValidation = true;
             }
             if (!string.IsNullOrEmpty(prestamo.LibroId))
             {
                 LibroModel libro = await _googleBooksService.ObtenerLibroPorId(prestamo.LibroId);
                 ViewBag.Libro = libro;
             }
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || skipValidation)
             {
                 try
                 {
