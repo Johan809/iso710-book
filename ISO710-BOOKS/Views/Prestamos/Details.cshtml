@@ -10,18 +10,19 @@
 <div>
     <h4>Prestamo</h4>
     <hr />
+
+    <div class="float-end">
+        <!-- Mostrar detalles del libro si está disponible -->
+        @if (libro != null)
+        {
+            <div>
+                <strong>Portada del Libro:</strong>
+                <br />
+                <img src="@libro.PortadaUrl" alt="Portada del libro" style="width: 200px;" class="border border-1 border-dark" />
+            </div>
+        }
+    </div>
     <dl class="row">
-        <div class="float-end">
-            <!-- Mostrar detalles del libro si está disponible -->
-            @if (libro != null)
-            {
-                <div>
-                    <strong>Portada del Libro:</strong>
-                    <br />
-                    <img src="@libro.PortadaUrl" alt="Portada del libro" style="width: 200px;" class="border border-1 border-dark" />
-                </div>
-            }
-        </div>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Isbn)
         </dt>

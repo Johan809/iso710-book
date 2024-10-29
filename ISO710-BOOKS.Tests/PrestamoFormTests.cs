@@ -68,7 +68,7 @@ public class PrestamoFormTests
 
         // Enviar el formulario
         var submitButton = driver.FindElement(By.Id("btnSubmit"));
-        submitButton.Click();
+        ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", submitButton);
 
         // Verificar que la redirección a la página de índice sea exitosa
         Assert.That(driver.Url, Is.EqualTo(base_url),
@@ -83,8 +83,7 @@ public class PrestamoFormTests
         // Intenta enviar el formulario sin llenar campos obligatorios
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
         var submitButton = wait.Until(ExpectedConditions.ElementToBeClickable(By.Id("btnSubmit")));
-        ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", submitButton);
-        submitButton.Click();
+        ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", submitButton);
 
         // Verifica que aparezcan mensajes de validación para los campos requeridos
         wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//*[contains(text(), 'El ISBN es obligatorio.')]")));
